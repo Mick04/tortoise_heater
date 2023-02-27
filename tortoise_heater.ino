@@ -1,25 +1,4 @@
-/*>*/
-
-/*
- Basic ESP8266 MQTT example
- This sketch demonstrates the capabilities of the pubsub library in combination
- with the ESP8266 board/library.
- It connects to an MQTT server then:
-  - publishes "hello world" to the topic "outTopic" every two seconds
-  - subscribes to the topic "inTopic", printing out any messages
-    it receives. NB - it assumes the received payloads are strings not binary
-  - If the first character of the topic "inTopic" is an 1, switch ON the ESP Led,
-    else switch it off
- It will reconnect to the server if the connection is lost using a blocking
- reconnect function. See the 'mqtt_reconnect_nonblocking' example for how to
- achieve the same result without blocking the main loop.
- To install the ESP8266 board, (using Arduino 1.6.4+):
-  - Add the following 3rd party board manager under "File -> Preferences -> Additional Boards Manager URLs":
-       http://arduino.esp8266.com/stable/package_esp8266com_index.json
-  - Open the "Tools -> Board -> Board Manager" and click install for the ESP8266"
-  - Select your ESP8266 in "Tools -> Board"
-*/
-
+//****** OTA *******
 
 #include <ArduinoJson.h>
 #include <ESP8266WiFi.h>
@@ -32,7 +11,7 @@
 //#include <ESP8266WebServer.h>
 #include <OneWire.h>
 //#include <iostream>
-//#include <string.h>
+//#include <string.h> branch 
 //#include <stdio.h>
 //#include <cstdint>
 #define Relay_Pin D5  //active board
@@ -169,19 +148,19 @@ void callback(char* topic, byte* payload, unsigned int length) {
 
   if (Reset == true) {
     if (strstr(topic, "day_h")) {
-      sscanf((char*)payload, "%02d", &Day_Hours);
+      sscanf((char*)payload, "%02d", &Day_Hours);//if topic = day_h then Day_Hours = payload
       Serial.println("...");
       Serial.print("** 176 ** callBack ** Day_Hours =  ");
       Serial.println(Day_Hours);
     }
     if (strstr(topic, "day_m")) {
-      sscanf((char*)payload, "%02d", &Day_Minutes);
+      sscanf((char*)payload, "%02d", &Day_Minutes);//if topic = day_m then Day_Minutes = payload
       Serial.println("...");
       Serial.print("** 183 ** Day_Minutes =  ");
       Serial.println(Day_Minutes);
     }
     if (strstr(topic, "day_temp")) {
-      sscanf((char*)payload, "%02d", &DayHighTemp);
+      sscanf((char*)payload, "%02d", &DayHighTemp);//if topic = day_temp then DayHighTemp = payload
       Serial.println("...");
       Serial.print("** 190 ** DayHighTemp =  ");
       Serial.print(DayHighTemp);
@@ -189,21 +168,21 @@ void callback(char* topic, byte* payload, unsigned int length) {
     }
 
     if (strstr(topic, "night_h")) {
-      sscanf((char*)payload, "%02d", &Night_Hours);
+      sscanf((char*)payload, "%02d", &Night_Hours);//if topic = night_h then Night_Hours = payload
       Serial.println("...");
       Serial.print("** 199 ** Night_Hours =  ");
       Serial.println(Night_Hours);
     }
 
     if (strstr(topic, "night_m")) {
-      sscanf((char*)payload, "%02d", &Night_Minutes);
+      sscanf((char*)payload, "%02d", &Night_Minutes);//if topic = night_m then Night_Minutes = payload
       Serial.println("...");
       Serial.print("** 207 ** Night_Minutes =  ");
       Serial.println(Night_Minutes);
     }
 
       if (strstr(topic, "night_temp")) {
-        sscanf((char*)payload, "%02d", &NightHighTemp);
+        sscanf((char*)payload, "%02d", &NightHighTemp);//if topic = night_temp then night_temp = payload
         Serial.println("...");
         Serial.print("** 215 **NightHighTemp = ");
         Serial.println(NightHighTemp);
@@ -679,16 +658,13 @@ Serial.print("** 476 ** s1 = ");
 }    
 
   void loop() {
-delay(1000);
+//delay(1000);
     if (!client.connected()) {
       reconnect();
     }
-
-
-
-
-    client.loop();
     sendSensor();
+    client.loop();
+    
     timeClient.update();
     Day = timeClient.getDay();
     Hours = timeClient.getHours();
