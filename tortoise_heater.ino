@@ -169,17 +169,6 @@ void callback(char* topic, byte* payload, unsigned int length) {
     if (strstr(topic, "night_temp")) {
       sscanf((char*)payload, "%02d", &NightHighTemp);//if topic = night_temp then night_temp = payload
     }
-    /*****************************************
-      don't really need this section.
-    ******************************************/
-    // Switch on the LED if an 1 was received as first character
-    if ((char)payload[0] == '1') {
-      digitalWrite(LED_BUILTIN, LOW);  // Turn the LED on (Note that LOW is the voltage level
-      // but actually the LED is on; this is because
-      // it is active low on the ESP-01)
-    } else if ((char)payload[0] == '0') {
-      digitalWrite(LED_BUILTIN, HIGH);  // Turn the LED off by making the voltage HIGH
-    }
   }
 }
 /********************************************
@@ -206,7 +195,9 @@ void reconnect() {
       client.subscribe("day_temp");
       client.subscribe("night_h");
       client.subscribe("night_m");
-      client.subscribe("night_temp");
+      int night_temp = client.subscribe("night_temp");
+      Serial.print("night_temp = ");
+      Serial.print(night_temp);
       client.subscribe("TargetTemp");
     } else {
       Serial.print("failed, reconnect = ");
@@ -215,6 +206,7 @@ void reconnect() {
       // Wait 5 seconds before retrying
       delay(5000);
     }
+
   }
 }
 
@@ -236,7 +228,6 @@ void convertor(void) {
   float myFloat3 = s3;
   sprintf(sensVal, "%f", myFloat3);
   client.publish("outSide", sensVal);
-  Serial.println("...");
 }
 
 
@@ -422,11 +413,9 @@ void setup() {
   pinMode(Relay_Pin, OUTPUT);
   pinMode(LED_Pin, OUTPUT);      //digitalWrite (LED_Pin, LOW);//LED_Pin off
   pinMode(LED_BUILTIN, OUTPUT);  // Initialize the LED_BUILTIN pin as an output
-
   setup_wifi();
   client.setServer(mqtt_server, 1883);
   client.setCallback(callback);
-
   /************************************
           OVER THE AIR START
   *                                  *
@@ -463,7 +452,6 @@ void setup() {
   Serial.println("Ready");
   Serial.print("IP address: ");
   Serial.println(WiFi.localIP());
-
 }
 /************************************
          OVER THE AIR END
