@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 //****** OTA *******
+=======
+>>>>>>> 2032f1ed40ad2481b43e947dbe6590cc266b414b
 
 #include <ArduinoJson.h>
 #include <ESP8266WiFi.h>
@@ -11,8 +14,15 @@
 #include <ESP8266WebServer.h>
 #include <Adafruit_Sensor.h>
 #include <OneWire.h>
+<<<<<<< HEAD
 #include "LittleFS.h"
 
+=======
+//#include <iostream>
+//#include <string.h> branch 
+//#include <stdio.h>
+//#include <cstdint>
+>>>>>>> 2032f1ed40ad2481b43e947dbe6590cc266b414b
 #define Relay_Pin D5  //active board
 #define LED_Pin 13    //on board LED_Pin
 //#define LED_Pin D6//LED_Pin  //change when debuged
@@ -150,24 +160,76 @@ void callback(char* topic, byte* payload, unsigned int length) {
   if (Reset == true) {
     if (strstr(topic, "day_h")) {
       sscanf((char*)payload, "%02d", &Day_Hours);//if topic = day_h then Day_Hours = payload
+<<<<<<< HEAD
     }
     if (strstr(topic, "day_m")) {
       sscanf((char*)payload, "%02d", &Day_Minutes);//if topic = day_m then Day_Minutes = payload
     }
     if (strstr(topic, "day_temp")) {
       sscanf((char*)payload, "%02d", &DayHighTemp);//if topic = day_temp then DayHighTemp = payload
+=======
+      Serial.println("...");
+      Serial.print("** 176 ** callBack ** Day_Hours =  ");
+      Serial.println(Day_Hours);
+    }
+    if (strstr(topic, "day_m")) {
+      sscanf((char*)payload, "%02d", &Day_Minutes);//if topic = day_m then Day_Minutes = payload
+      Serial.println("...");
+      Serial.print("** 183 ** Day_Minutes =  ");
+      Serial.println(Day_Minutes);
+    }
+    if (strstr(topic, "day_temp")) {
+      sscanf((char*)payload, "%02d", &DayHighTemp);//if topic = day_temp then DayHighTemp = payload
+      Serial.println("...");
+      Serial.print("** 190 ** DayHighTemp =  ");
+      Serial.print(DayHighTemp);
+
+>>>>>>> 2032f1ed40ad2481b43e947dbe6590cc266b414b
     }
 
     if (strstr(topic, "night_h")) {
       sscanf((char*)payload, "%02d", &Night_Hours);//if topic = night_h then Night_Hours = payload
+<<<<<<< HEAD
+=======
+      Serial.println("...");
+      Serial.print("** 199 ** Night_Hours =  ");
+      Serial.println(Night_Hours);
+>>>>>>> 2032f1ed40ad2481b43e947dbe6590cc266b414b
     }
 
     if (strstr(topic, "night_m")) {
       sscanf((char*)payload, "%02d", &Night_Minutes);//if topic = night_m then Night_Minutes = payload
+<<<<<<< HEAD
     }
 
     if (strstr(topic, "night_temp")) {
       sscanf((char*)payload, "%02d", &NightHighTemp);//if topic = night_temp then night_temp = payload
+=======
+      Serial.println("...");
+      Serial.print("** 207 ** Night_Minutes =  ");
+      Serial.println(Night_Minutes);
+    }
+
+      if (strstr(topic, "night_temp")) {
+        sscanf((char*)payload, "%02d", &NightHighTemp);//if topic = night_temp then night_temp = payload
+        Serial.println("...");
+        Serial.print("** 215 **NightHighTemp = ");
+        Serial.println(NightHighTemp);
+      }
+/*****************************************
+* don't really need this section.        *
+******************************************/
+    // Switch on the LED if an 1 was received as first character
+    if ((char)payload[0] == '1') {
+      Serial.println("...");
+      Serial.print("** 225 ** payload[0] =  ");
+      Serial.println(payload[0]);
+      digitalWrite(LED_BUILTIN, LOW);  // Turn the LED on (Note that LOW is the voltage level
+      // but actually the LED is on; this is because
+      // it is active low on the ESP-01)
+    } else if ((char)payload[0] == '0') {
+      digitalWrite(LED_BUILTIN, HIGH);  // Turn the LED off by making the voltage HIGH
+>>>>>>> 2032f1ed40ad2481b43e947dbe6590cc266b414b
     }
   }
 }
@@ -310,7 +372,51 @@ void sendSensor() {
     delay(250);
     return;
   }
+<<<<<<< HEAD
   for (i = 0; i < 8; i++) {  //we need to drop 8 bytes of data
+=======
+
+}    
+
+  void loop() {
+//delay(1000);
+    if (!client.connected()) {
+      reconnect();
+    }
+    sendSensor();
+    client.loop();
+    
+    timeClient.update();
+    Day = timeClient.getDay();
+    Hours = timeClient.getHours();
+    Minutes = timeClient.getMinutes();
+    seconds = timeClient.getSeconds();
+    Serial.println("...");
+     Serial.print("** 697 ** Time =  ");
+     Serial.print(Hours);
+      Serial.print(" : ");
+      Serial.print(Minutes);
+      Serial.println("...");
+
+
+    Am = true;
+    AmType[1] = 'Y';
+    if (Hours >= 12) {
+      Am = false;
+      AmType[1] = 'N';
+    }
+
+        // // readData(Day_Hours,Day_Minutes,DayHighTemp);
+        // Serial.print("**** 652 *** Day_Hours = ");
+        // Serial.println(Day_Hours);
+        // Serial.print("**** 652 *** Day_Minutes = ");
+        // Serial.println(Day_Minutes);
+        // Serial.print("**** 652 *** DayHighTemp = ");
+        // Serial.println(DayHighTemp);
+        //  Day_Hours = client.subscribe("day_h"); 
+        //  Serial.println("*** Day_Hours = ");   
+        //  Serial.println(Day_Hours);   
+>>>>>>> 2032f1ed40ad2481b43e947dbe6590cc266b414b
   }
   adr = (addr[7]);
 
